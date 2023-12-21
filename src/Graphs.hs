@@ -61,7 +61,12 @@ graphB = graphFromEdgeDistance edges
     (maxX, maxY) = (50, 50)
     vertices :: [Vertex]
     vertices = [(x, y) | x <- [minX..maxX], y <- [minY..maxY]]
-    edges = concat $ map createRelations vertices
+    edges = filter removeBlock $ concat $ map createRelations vertices
+    removeBlock ((x, y), (xa, ya), _)
+      = not ((x < 30 && x > 15 && y < 35 && y > 20
+        && xa < 30 && xa > 15 && ya < 35 && ya > 20) ||
+        (x < 30 && x > 25 && y < 25 && y > 5
+        && xa < 30 && xa > 25 && ya < 25 && ya > 5))
     createRelations :: Vertex -> [Edge]
     createRelations (x, y) =
       [ ((x, y), (x + 0, y + 1), 1)
