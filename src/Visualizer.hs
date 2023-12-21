@@ -4,7 +4,8 @@ import Debug.Trace (trace, traceShowId)
 import Data.Maybe (fromJust)
 import Graphics.Gloss
 import Graphics.Gloss.Data.Color
-import Dijkstra
+import Dijkstra (shortestPath)
+import Graphs (graphB)
 import GHC.Float (int2Float)
 
 nodeSize = 40
@@ -13,7 +14,7 @@ nodeY = 80
 
 graph = graphB
 from = (1, 0)
-to = (80, 60)
+to = (40, 30)
 
 drawRelationLines origin (coord, _) = Line [origin, nodeLocation coord]
 
