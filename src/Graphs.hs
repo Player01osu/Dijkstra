@@ -57,17 +57,19 @@ graphA =
 --
 graphB = graphFromEdgeDistance edges
   where
-    (minX, minY) = (1, 1)
+    (minX, minY) = (0, 0)
     (maxX, maxY) = (50, 50)
     vertices :: [Vertex]
     vertices = [(x, y) | x <- [minX..maxX], y <- [minY..maxY]]
     edges = filter removeBlock $ concat $ map createRelations vertices
     inBlockParam (x, y) xLow xHigh yLow yHigh =
-      x < xHigh && x > xLow && y < yHigh && y > yLow
+      x <= xHigh && x >= xLow && y <= yHigh && y >= yLow
     blockA coord = inBlockParam coord 15 30 20 35
     blockB coord = inBlockParam coord 25 30 5 25
+    inPerimeter coord = inBlockParam coord minX maxX minY maxY
     removeBlock (from, to, _)
-      = not ((blockA from && blockA to) || (blockB from && blockB to))
+      = not ((blockA from && blockA to) || (blockB from && blockB to)) &&
+        (inPerimeter to && inPerimeter from)
     createRelations :: Vertex -> [Edge]
     createRelations (x, y) =
       [ ((x, y), (x - 1, y + 0), 1)

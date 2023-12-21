@@ -13,7 +13,7 @@ nodeX = 80
 nodeY = 80
 
 graph = graphB
-from = (1, 0)
+from = (1, 1)
 to = (40, 30)
 
 drawRelationLines origin (coord, _) = Line [origin, nodeLocation coord]
