@@ -69,8 +69,7 @@ graphB = graphFromEdgeDistance edges
         && xa < 30 && xa > 25 && ya < 25 && ya > 5))
     createRelations :: Vertex -> [Edge]
     createRelations (x, y) =
-      [ ((x, y), (x + 0, y + 1), 1)
-      , ((x, y), (x - 1, y + 0), 1)
+      [ ((x, y), (x - 1, y + 0), 1)
       , ((x, y), (x + 1, y - 1), 1.141)
       , ((x, y), (x + 0, y - 1), 1)
       , ((x, y), (x + 1, y + 1), 1.141) ]
