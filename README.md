@@ -3,6 +3,8 @@
 
 Dijkstra's algorithm implementation with visualization
 
+![Robot Path Planning Example](assets/robot-path-planning-example.png)
+
 ## Quickstart
 
 ```console
