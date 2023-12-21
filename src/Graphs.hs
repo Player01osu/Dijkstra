@@ -62,11 +62,12 @@ graphB = graphFromEdgeDistance edges
     vertices :: [Vertex]
     vertices = [(x, y) | x <- [minX..maxX], y <- [minY..maxY]]
     edges = filter removeBlock $ concat $ map createRelations vertices
-    removeBlock ((x, y), (xa, ya), _)
-      = not ((x < 30 && x > 15 && y < 35 && y > 20
-        && xa < 30 && xa > 15 && ya < 35 && ya > 20) ||
-        (x < 30 && x > 25 && y < 25 && y > 5
-        && xa < 30 && xa > 25 && ya < 25 && ya > 5))
+    inBlockParam (x, y) xLow xHigh yLow yHigh =
+      x < xHigh && x > xLow && y < yHigh && y > yLow
+    blockA coord = inBlockParam coord 15 30 20 35
+    blockB coord = inBlockParam coord 25 30 5 25
+    removeBlock (from, to, _)
+      = not ((blockA from && blockA to) || (blockB from && blockB to))
     createRelations :: Vertex -> [Edge]
     createRelations (x, y) =
       [ ((x, y), (x - 1, y + 0), 1)
