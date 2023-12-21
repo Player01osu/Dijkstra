@@ -10,7 +10,7 @@ where
 
 import qualified Data.Map.Strict as M
 
-type Distance = Int
+type Distance = Double
 
 type Vertex = (Int, Int)
 
@@ -66,6 +66,6 @@ graphB = graphFromEdgeDistance edges
     createRelations (x, y) =
       [ ((x, y), (x + 0, y + 1), 1)
       , ((x, y), (x - 1, y + 0), 1)
-      , ((x, y), (x + 1, y - 1), 1)
+      , ((x, y), (x + 1, y - 1), 1.141)
       , ((x, y), (x + 0, y - 1), 1)
-      , ((x, y), (x + 1, y + 1), 1) ]
+      , ((x, y), (x + 1, y + 1), 1.141) ]
