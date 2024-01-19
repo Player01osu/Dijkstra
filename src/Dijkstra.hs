@@ -32,15 +32,18 @@ shortestPath from to graph = pathDistance
       | otherwise = buildPath (getVertex $ fromJust $ tree M.! vertex) (vertex:acc)
     getVertex (vertex, _) = vertex
 
-shortestPathTree :: Vertex -> Graph -> DistanceMap
-shortestPathTree from graph = go (S.singleton (0, from)) S.empty initDistanceMap
+type Part = (VertexQueue, S.Set Vertex, DistanceMap)
+
+shortestPathTreePart :: Vertex -> Graph -> Maybe Part -> Either Part DistanceMap
+shortestPathTreePart from graph Nothing = shortestPathTreePart from graph (Just ((S.singleton (0, from)), S.empty, initDistanceMap))
   where
     initDistanceMap =
       M.insert from (Just (from, 0)) $ M.fromList $ map (\k -> (k, Nothing)) $ M.keys graph
-
-    go :: VertexQueue -> S.Set Vertex -> DistanceMap -> DistanceMap
+shortestPathTreePart from graph (Just (pqueue, visited, distanceMap)) = go pqueue visited distanceMap
+  where
+    go :: VertexQueue -> S.Set Vertex -> DistanceMap -> Either Part DistanceMap
     go pqueue visited distanceMap
-      | S.null pqueue = distanceMap
+      | S.null pqueue = Right distanceMap
       | otherwise =
           let ((_, cur), rest) = S.deleteFindMin pqueue
               vertexDistance = graph M.! cur
@@ -52,7 +55,7 @@ shortestPathTree from graph = go (S.singleton (0, from)) S.empty initDistanceMap
                 rest
                 (S.fromList $
                   (filter (\(_, v) -> not $ S.member v visited) $ map (\(v, d) -> (d, v)) vertexDistance))
-          in (go newQueue newVisited newMap)
+          in Left (newQueue, newVisited, newMap)
 
     updateMap vertexDistance cur curWeight distanceMap =
       foldl (insertMin cur curWeight) distanceMap vertexDistance
@@ -67,3 +70,9 @@ shortestPathTree from graph = go (S.singleton (0, from)) S.empty initDistanceMap
     chooseMin (l, r) a b
       | a < b = (l, a)
       | otherwise = (r, b)
+
+shortestPathTree :: Vertex -> Graph -> DistanceMap
+shortestPathTree from graph = go $ shortestPathTreePart from graph Nothing
+  where
+    go (Left part) = go $ shortestPathTreePart from graph (Just part)
+    go (Right distanceMap) = distanceMap
