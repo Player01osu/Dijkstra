@@ -21,9 +21,13 @@ type DistanceMap = M.Map Vertex (Maybe (Vertex, Distance))
 type VertexQueue = S.Set (Distance, Vertex)
 
 shortestPath :: Vertex -> Vertex -> Graph -> Maybe ([Vertex], Distance)
-shortestPath from to graph = pathDistance
+shortestPath from to graph = shortestPathDistanceMap tree
   where
     tree = (shortestPathTree from graph)
+
+shortestPathDistanceMap :: DistanceMap -> Maybe ([Vertex], Distance)
+shortestPathDistanceMap tree = pathDistance
+  where
     pathDistance = case tree M.! to of
       Just (vertex, distance) -> Just $ (from:buildPath vertex [to], distance)
       Nothing -> Nothing
