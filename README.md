@@ -15,7 +15,7 @@ cabal run
 
 - [X] Basic visualization
 - [X] Working Dijkstra's algorithm implementation
-- [ ] Iterative animation for algorithms
+- [X] Iterative animation for algorithms
 - [ ] Working A* implementation
 - [ ] Different graph views
 - [ ] Graph editor
