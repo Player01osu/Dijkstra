@@ -1,7 +1,12 @@
 module Dijkstra
   ( DistanceMap
   , shortestPath
-  , shortestPathTree )
+  , shortestPathTree
+  , shortestPathTreePart
+  , shortestPathDistanceMap
+  , Part
+  , VertexQueue
+  , Vertex )
 where
 
 import qualified Data.Map.Strict as M
@@ -21,12 +26,12 @@ type DistanceMap = M.Map Vertex (Maybe (Vertex, Distance))
 type VertexQueue = S.Set (Distance, Vertex)
 
 shortestPath :: Vertex -> Vertex -> Graph -> Maybe ([Vertex], Distance)
-shortestPath from to graph = shortestPathDistanceMap tree
+shortestPath from to graph = shortestPathDistanceMap from to tree
   where
     tree = (shortestPathTree from graph)
 
-shortestPathDistanceMap :: DistanceMap -> Maybe ([Vertex], Distance)
-shortestPathDistanceMap tree = pathDistance
+shortestPathDistanceMap :: Vertex -> Vertex -> DistanceMap -> Maybe ([Vertex], Distance)
+shortestPathDistanceMap from to tree = pathDistance
   where
     pathDistance = case tree M.! to of
       Just (vertex, distance) -> Just $ (from:buildPath vertex [to], distance)
